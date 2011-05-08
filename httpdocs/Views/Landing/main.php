@@ -1,4 +1,4 @@
-<form method="post" enctype="multipart/form-data">
+<form action="<?= URL::create('Match', 'process'); ?>" method="post" enctype="multipart/form-data">
 	<label for="repository">GitHub Repository URL</label>
 	<input type="text" name="repository" id="repository" />
 	<label for="file">Upload File</label>

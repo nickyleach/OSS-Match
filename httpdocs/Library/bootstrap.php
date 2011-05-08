@@ -1,7 +1,10 @@
 <?
 
 function __autoload($class){
-	require_once "Library/$class.php";
+	$path = "Library/$class.php";
+	
+	if(file_exists($path))
+		require_once $path;
 }
 
 function die_dump(){
@@ -19,5 +22,13 @@ function either(){
 	
 	return $arg;
 }
+
+function require_if_exists($path){
+	if(file_exists($path)) require_once $path;
+	return class_exists(basename($path, '.php'), false);
+}
+
+// 3rd Party Functions
+include 'vendors/preg_find.php';
 
 ?>

@@ -34,9 +34,12 @@ class Controller {
 	
 	public static function create($name){
 		$controllerName = "{$name}Controller";
-		require_once "Controllers/$controllerName.php";
+		$controllerFile = "Controllers/$controllerName.php";
 		
-		if(class_exists($controllerName)){
+		if(file_exists($controllerFile))
+			require_once $controllerFile;
+		
+		if(class_exists($controllerName, false)){
 			return new $controllerName();
 		} else {
 			throw new Exception("Undefined controller - $controllerName");
