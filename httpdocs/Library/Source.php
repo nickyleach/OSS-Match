@@ -13,6 +13,8 @@ class Source {
 		$type = self::getType($path);
 		$analyzerName = "{$type}Analyzer";
 		
+		if(!$type) return false;
+		
 		require_once "Library/Analyzers/Analyzer.php";
 		return require_if_exists("Library/Analyzers/$analyzerName.php");
 	}

@@ -1,6 +1,6 @@
 <?
 
-class PHPAnalyzer implements Analyzer {
+class PHPAnalyzer extends Analyzer {
 	protected $path;
 	
 	public function __construct($path){
@@ -8,12 +8,22 @@ class PHPAnalyzer implements Analyzer {
 	}
 	
 	public function analyze(){
-		return array(
-			'comment_presence'=>1,
-			'comment_percentage'=>0.03,
-			'indentation_baseline'=>1,
-			'errors'=>0
-		);
+		return array_merge($this->codeSniffer());
+	}
+	
+	protected function codeSniffer(){
+		$response = Util::exec_script('Analyzers/php_codesniffer', $this->path);
+		if($response['return'] != 0) return array();
+		
+		$xml = simplexml_load_file($response['output'][0]);
+		$smells = $xml->file->children();
+		
+		$attributes = array();
+		foreach($smells as $smell){
+			$attributes[(string)$smell['source']]++;
+		}
+		
+		return $attributes;
 	}
 }
 

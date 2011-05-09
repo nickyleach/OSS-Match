@@ -28,7 +28,7 @@ fi
 cd /tmp
 
 if [ -d $DESTINATION ]; then
-	rm -Rf $DESTINATION
+	rm -Rf $DESTINATION > /dev/null 2>&1
 fi
 
 if [ ! -d $DESTINATION ]; then

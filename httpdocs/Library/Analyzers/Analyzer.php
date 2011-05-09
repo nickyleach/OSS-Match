@@ -1,8 +1,8 @@
 <?
 
-interface Analyzer {
-	public function __construct($path);
-	public function analyze();
+abstract class Analyzer {
+	abstract public function __construct($path);
+	abstract public function analyze();
 }
 
 ?>
