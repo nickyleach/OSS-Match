@@ -25,23 +25,25 @@ class Source {
 		// If a Source object for this file already exists, there is no need to recompute its attributes
 		if(self::exists($id)) return new Source($id);
 		
+		$source = new Source($id);
+		
 		if(!self::analyzable($path)){
 			throw new SourceCreateException("There is no Analyzer defined for this file");
 		}
 		
-		$type = self::getType($path);
-		$analyzerName = "{$type}Analyzer";
+		$source->type = self::getType($path);
+		$analyzerName = "{$source->type}Analyzer";
 		
 		$analyzer = new $analyzerName($path);
-		$features = $analyzer->analyze();
+		$source->features = $analyzer->analyze();
 		
-		self::save($id, compact('features', 'type'));
+		$source->save();
 		
-		return new Source($id);
+		return $source;
 	}
 	
-	protected static function exists($id){
-		Redis::exists("Source::$id");
+	public static function exists($id){
+		return Redis::exists("Source::$id");
 	}
 	
 	protected static function getID($path){
@@ -53,21 +55,19 @@ class Source {
 	}
 	
 	protected function load($id){
-		$data = Redis::get("Source::$id");
+		$data = Redis::hgetall("Source::$id");
 		
-		if(!(isset($data['features']) && isset($data['type']))) throw new SourceLoadException("Invalid Source retrieved from storage");
-		
-		foreach($data as $field => $val){
-			$this->$field = $val;
+		foreach($data as $key => $val){
+			if($key % 2 == 0){
+				$this->$val = json_decode($data[$key + 1], true);
+			}
 		}
 		
 		$this->id = $id;
 	}
 	
-	protected static function save($id, $data){
-		if(!(isset($data['features']) && isset($data['type']))) throw new SourceSaveException("Invalid Source saved to storage");
-		
-		Redis::set("Source::$id", $data);
+	public function save(){
+		Redis::hmset("Source::{$this->id}", 'features', json_encode($this->features), 'type', json_encode($this->type));
 	}
 }
 

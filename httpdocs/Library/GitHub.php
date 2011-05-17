@@ -6,7 +6,7 @@ class GitHub {
 		
 		if($response['return'] != 0) throw new ParseException("Unable to parse the repository at URL '$url'");
 		
-		$repository = new Repository(self::username($url) . '/' . self::repository($url));
+		$repository = Repository::create(self::username($url) . '/' . self::repository($url), $url);
 		
 		$files = FileSystem::files($response['output'][0], true);
 		foreach($files as $path){
@@ -16,7 +16,11 @@ class GitHub {
 			}
 		}
 		
-		Util::exec_script("GitHub/cleanup_repository", self::urlToGit($url));
+		$repository->save();
+		
+		Util::exec_script("GitHub/cleanup_repository", self::urlToGit($url), true);
+		
+		return $repository->id;
 	}
 	
 	public static function urlToGit($url){

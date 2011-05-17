@@ -10,9 +10,9 @@ class Util {
 		exit;
 	}
 	
-	public static function exec_script($script, $arg = null){
+	public static function exec_script($script, $arg = null, $fork = false){
 		$args = implode(" ", array_slice(func_get_args(), 1));
-		$command = "sh ../shell/$script.sh $args";
+		$command = "sh ../shell/$script.sh $args " . ( $fork ? "&" : "" );
 		$output;
 		$return;
 		

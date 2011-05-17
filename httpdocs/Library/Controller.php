@@ -63,8 +63,7 @@ class Controller {
 		}
 		
 		if(!method_exists($this, $this->action)){
-			if($this->defaultToIndex){
-				$this->action = to_camel_case($this->action);
+			if($this->defaultToIndex && method_exists($this, 'index')){
 				array_unshift($this->args, $this->action);
 				$this->action = 'index';
 				$this->filter($this->action, $this->args);
@@ -84,6 +83,22 @@ class Controller {
 	
 	public function loadView($view, $outlet){
 		$this->views[$outlet][] = $view;
+	}
+	
+	public static function redirect($controller, $action = null, $args = null, $params = null, $hard = false){
+		$url = URL::create($controller, $action, $args, $params);
+		
+		// do actual redirect
+		if($hard){
+			header('HTTP/1.1 301 Moved Permanently');
+			header('Location: ' . $url);
+		} else {
+			header('Cache-Control:no-store, no-cache, must-revalidate, post-check=0, pre-check=0  ');
+			header('Pragma: no-cache ');	   
+			header('Location: ' . $url);
+		}
+		
+		exit;
 	}
 	
 	public function render(){
