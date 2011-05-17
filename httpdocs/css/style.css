@@ -81,19 +81,6 @@ a:hover { color: #036; }
  * Author: 
  */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 .ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
 .hidden { display: none; visibility: hidden; }
 .visuallyhidden { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
@@ -134,3 +121,37 @@ a:hover { color: #036; }
   h2, h3{ page-break-after: avoid; }
 }
 
+/* Custom Styles
+--------------------------------------------------------------------- */
+header, footer {
+	background:#EFEFEF;
+	bottom:0px;
+	height:3em;
+	line-height:3em;
+	width:100%;
+}
+header h1 {
+	text-align:center;
+}
+footer {
+	bottom:0px;
+	position:fixed;
+}
+footer ul {
+	list-style:none;
+	margin:0px;
+	text-align:center;
+}
+footer li {
+	display:inline;
+}
+
+h1 { font-size:2em; }
+h2 { font-size:1.5em; }
+h3 { font-size:1.3em; }
+p { margin-bottom:1em; }
+
+#main {
+	margin-bottom:3em;
+	padding:2em 4em;
+}

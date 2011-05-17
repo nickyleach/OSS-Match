@@ -91,12 +91,12 @@ class Controller {
 		// do actual redirect
 		if($hard){
 			header('HTTP/1.1 301 Moved Permanently');
-			header('Location: ' . $url);
 		} else {
 			header('Cache-Control:no-store, no-cache, must-revalidate, post-check=0, pre-check=0  ');
 			header('Pragma: no-cache ');	   
-			header('Location: ' . $url);
 		}
+		
+		header('Location: ' . $url);
 		
 		exit;
 	}

@@ -62,6 +62,17 @@ class Repository {
 		return $features;
 	}
 	
+	public function feature_keys(){	
+		$keys = array();
+		foreach($this->features() as $type => $attributes){
+			foreach($attributes as $attribute => $value){
+				$keys[] = "Match::{$type}::{$attribute}";
+			}
+		}
+		
+		return $keys;
+	}
+	
 	protected function load($id){
 		$data = Redis::hgetall("Repository::$id");
 		

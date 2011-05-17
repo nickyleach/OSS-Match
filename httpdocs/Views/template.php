@@ -15,8 +15,8 @@
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-  <link rel="stylesheet" href="css/style.css?v=2">
-  <script src="js/libs/modernizr-1.7.min.js"></script>
+  <link rel="stylesheet" href="//ossmatch.nleach.com/css/style.css?v=2">
+  <script src="//ossmatch.nleach.com/js/libs/modernizr-1.7.min.js"></script>
 
 </head>
 
@@ -36,12 +36,12 @@
 
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
-  <script>window.jQuery || document.write("<script src='js/libs/jquery-1.5.1.min.js'>\x3C/script>")</script>
+  <script>window.jQuery || document.write("<script src='//ossmatch.nleach.com/js/libs/jquery-1.5.1.min.js'>\x3C/script>")</script>
 
 
   <!-- scripts concatenated and minified via ant build script-->
-  <script src="js/plugins.js"></script>
-  <script src="js/script.js"></script>
+  <script src="//ossmatch.nleach.com/js/plugins.js"></script>
+  <script src="//ossmatch.nleach.com/js/script.js"></script>
   <!-- end scripts-->
 
 

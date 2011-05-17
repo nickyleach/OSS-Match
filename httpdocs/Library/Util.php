@@ -20,6 +20,18 @@ class Util {
 		
 		return compact('command', 'output', 'return');
 	}
+	
+	public static function mutlibulk_to_array($response){
+		$keys = array();
+		
+		foreach($response as $key => $value){
+			if($key % 2 == 0){
+				$keys[$value] = $response[$key + 1];
+			}
+		}
+		
+		return $keys;
+	}
 }
 
 ?>
