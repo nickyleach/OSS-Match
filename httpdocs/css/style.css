@@ -155,3 +155,46 @@ p { margin-bottom:1em; }
 	margin-bottom:3em;
 	padding:2em 4em;
 }
+
+form label, form input {
+	display:block;
+	font-size:1.2em;
+}
+
+form label {
+	font-weight:bold;
+	padding-right:0.5em;
+}
+
+form #or {
+	font-size:1.2em;
+	margin:0px;
+	padding:1em 0em;
+}
+
+form input[type=submit] {
+	background: #B0E968; /* old browsers */
+	background: -moz-linear-gradient(top, #B0E968 0%, #ACE065 45%, #95D63D 46%, #99D034 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#B0E968), color-stop(45%,#ACE065), color-stop(46%,#95D63D), color-stop(100%,#99D034)); /* webkit */
+	border:1px solid #FBFBFB;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	box-shadow: 0px 0px 1px #A3A2A2;
+	-webkit-box-shadow: 0px 0px 1px #A3A2A2;
+	-moz-box-shadow: 0px 0px 1px #A3A2A2;
+	color:#FFF;
+	cursor:pointer;
+	display:block;
+	font-weight:bold;
+	font-size:1.3em;
+	height:1.5em;
+	line-height:1.3em;
+	margin:2em 0em;
+	padding:0em 1.75em;
+	text-align:center;
+	text-shadow:1px 1px #888;
+	
+	/* have to combine background and border in one filter style */ 
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#B0E968', endColorstr='#99D034',GradientType=0 ) /* background */
+			progid:DXImageTransform.Microsoft.Shadow(color='#A3A2A2', Direction=0, Strength=1) progid:DXImageTransform.Microsoft.Shadow(color='#A3A2A2', Direction=90, Strength=1) progid:DXImageTransform.Microsoft.Shadow(color='#A3A2A2', Direction=180, Strength=1) progid:DXImageTransform.Microsoft.Shadow(color='#A3A2A2', Direction=270, Strength=1); /* border */
+}

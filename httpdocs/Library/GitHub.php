@@ -11,7 +11,7 @@ class GitHub {
 		$files = FileSystem::files($response['output'][0], true);
 		foreach($files as $path){
 			if(Source::analyzable($path)){
-				$source = Source::create($path);
+				$source = Source::create($path, "github");
 				$repository->add($source->id);
 			}
 		}

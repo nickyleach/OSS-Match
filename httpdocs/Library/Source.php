@@ -3,6 +3,7 @@
 class Source {
 	public $id;
 	public $features;
+	public $origin;
 	public $type;
 	
 	public function __construct($id){
@@ -19,13 +20,15 @@ class Source {
 		return require_if_exists("Library/Analyzers/$analyzerName.php");
 	}
 	
-	public static function create($path, $source = "upload"){
+	public static function create($path, $origin = "upload"){
 		$id = self::getID($path);
 		
 		// If a Source object for this file already exists, there is no need to recompute its attributes
 		if(self::exists($id)) return new Source($id);
 		
 		$source = new Source($id);
+		
+		$source->origin = $origin;
 		
 		if(!self::analyzable($path)){
 			throw new SourceCreateException("There is no Analyzer defined for this file");
@@ -51,7 +54,15 @@ class Source {
 	}
 	
 	protected static function getType($path){
-		return strtoupper(pathinfo($path, PATHINFO_EXTENSION));
+		$type = mime_content_type($path);
+		$type = substr($type, stripos($type, '/'));
+		$type = substr($type, stripos($type, '-'));
+		
+		return strtoupper(trim($type, '/-'));
+	}
+	
+	public function isUpload(){
+		return $this->origin == "upload";
 	}
 	
 	protected function load($id){
@@ -67,7 +78,15 @@ class Source {
 	}
 	
 	public function save(){
-		Redis::hmset("Source::{$this->id}", 'features', json_encode($this->features), 'type', json_encode($this->type));
+		Redis::hmset("Source::{$this->id}",
+			'features', json_encode($this->features),
+			'type', json_encode($this->type),
+			'origin', json_encode($this->origin)
+		);
+		
+		if($this->isUpload()){
+			Redis::expire("Source::{$this->id}", UPLOAD_EXPIRE_TIME);
+		}
 	}
 }
 

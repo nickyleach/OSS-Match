@@ -10,6 +10,9 @@ function __autoload($class){
 		require_once $path;
 }
 
+
+define("UPLOAD_EXPIRE_TIME", 21600);
+
 function die_dump(){
 	foreach(func_get_args() as $arg){
 		var_dump($arg);

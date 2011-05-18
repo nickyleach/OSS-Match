@@ -4,7 +4,10 @@ class Repository {
 	public $id;
 	public $files;
 	public $name;
+	public $score;
 	public $url;
+	
+	protected $features;
 
 	public function __construct($id){
 		$this->load($id);
@@ -17,7 +20,7 @@ class Repository {
 		}
 	}
 	
-	public static function create($name, $url, $files = array()){
+	public static function create($name, $url = null, $files = array()){
 		$id = self::getID($name);
 		
 		// Handles old repositories as well
@@ -44,6 +47,8 @@ class Repository {
 	}
 	
 	public function features(){
+		if($this->features) return $this->features;
+		
 		$features = array();
 		foreach($this->files as $id){
 			$source = new Source($id);
@@ -59,7 +64,9 @@ class Repository {
 			}
 		}
 		
-		return $features;
+		$this->features = $features;
+		
+		return $this->features;
 	}
 	
 	public function feature_keys(){	
@@ -71,6 +78,17 @@ class Repository {
 		}
 		
 		return $keys;
+	}
+	
+	public function feature_score($key){
+		$parts = explode("::", $key);
+		$features = $this->features();
+		
+		return $features[$parts[1]][$parts[2]];
+	}
+	
+	public function isUpload(){
+		return !$this->url;
 	}
 	
 	protected function load($id){
@@ -89,12 +107,47 @@ class Repository {
 	
 	public function save(){
 		Redis::hmset("Repository::{$this->id}", 'name', json_encode($this->name), 'url', json_encode($this->url));
-				
+		
+		// Can't recommend an uploaded file to a user, so don't bother inserting
+		// it into the ranking sets, and go ahead and remove the reference to it
+		// at some point in the near future
+		if($this->isUpload()){
+			Redis::expire("Repository::{$this->id}", UPLOAD_EXPIRE_TIME);
+			return;
+		}
+		
+		// If it is a repository, we want to insert it into the ranking sets	
 		foreach($this->features() as $type => $attributes){
 			foreach($attributes as $attribute => $value){
 				Redis::zadd("Match::{$type}::{$attribute}", $value, $this->id);
 			}
 		}
+	}
+	
+	public function similar(){
+		$similarities = array();
+		foreach($this->feature_keys() as $key){
+			$keys = Util::mutlibulk_to_array(Redis::zrange($key, '0', '-1', 'withscores'));
+			$base = $this->feature_score($key);
+			$range = max($keys) - min($keys);
+			
+			$scores = array();
+			foreach($keys as $key => $val){
+				if($key == $this->id) continue;
+				$similarities[$key] += ($range - abs($base - $val)) / $range;
+			}
+		}
+		arsort($similarities);
+		
+		$repositories = array();
+		foreach($similarities as $repoID => $score){
+			$repository = new Repository($repoID);
+			$repository->score = $score;
+			
+			$repositories[] = $repository;
+		}
+		
+		return $repositories;
 	}
 }
 
