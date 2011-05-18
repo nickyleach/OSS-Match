@@ -24,7 +24,7 @@ class Controller {
 		
 		// Path
 		$this->meta = array();
-		$this->title = "OSS Match";
+		$this->title = "OSS Match by Nicky Leach";
 		$this->views = array();
 	}
 	
@@ -102,7 +102,10 @@ class Controller {
 	}
 	
 	public function render(){
-		$meta = $this->meta;
+		$meta = array_merge($this->meta, array(
+			'description'=>'OSS Match is a tool to help match you to open source projects',
+			'author'=>'Nicky Leach',
+		));
 		$title = $this->title;
 		$views = $this->views;
 		
